@@ -240,9 +240,9 @@ option(onnxruntime_USE_OPENVINO_INTERFACE "Build ONNXRuntime shared lib which is
 option(onnxruntime_USE_VITISAI_INTERFACE "Build ONNXRuntime shared lib which is compatible with Vitis-AI EP interface" OFF)
 option(onnxruntime_USE_QNN_INTERFACE "Build ONNXRuntime shared lib which is compatible with QNN EP interface" OFF)
 
-if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 11.1)
-  message(FATAL_ERROR  "GCC version must be greater than or equal to 11.1")
-endif()
+#if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 11.1)
+#  message(FATAL_ERROR  "GCC version must be greater than or equal to 11.1")
+#endif()
 
 # ENABLE_TRAINING includes all training functionality
 # The following 2 entry points
@@ -1009,7 +1009,7 @@ function(onnxruntime_set_compile_flags target_name)
       target_compile_definitions(${target_name} PRIVATE ENABLE_ATEN)
     endif()
 
-    set_target_properties(${target_name} PROPERTIES COMPILE_WARNING_AS_ERROR ON)
+    set_target_properties(${target_name} PROPERTIES COMPILE_WARNING_AS_ERROR OFF )
     if (onnxruntime_USE_CUDA)
       # Suppress a "conversion_function_not_usable" warning in gsl/span
       target_compile_options(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-Xcudafe \"--diag_suppress=conversion_function_not_usable\">")

@@ -68,7 +68,7 @@ if (onnxruntime_BUILD_UNIT_TESTS)
     URL ${DEP_URL_googletest}
     URL_HASH SHA1=${DEP_SHA1_googletest}
     EXCLUDE_FROM_ALL
-    FIND_PACKAGE_ARGS 1.14.0...<2.0.0 NAMES GTest
+    FIND_PACKAGE_ARGS 1.14.0...<2.0.0 NAMES GTest-0-0
   )
   FetchContent_MakeAvailable(googletest)
 endif()

@@ -9,6 +9,7 @@
 #include <string_view>
 #include <type_traits>
 
+
 #include "core/common/common.h"
 
 namespace onnxruntime {
@@ -34,6 +35,19 @@ constexpr bool ParseWithFromChars = !std::is_same_v<bool, T> && (std::is_integra
 template <typename T>
 std::enable_if_t<detail::ParseWithFromChars<T>, bool>
 TryParseStringWithClassicLocale(std::string_view str, T& value) {
+
+#if defined(__loongarch__)  // LoongArch 平台使用 istringstream
+  std::istringstream iss{std::string(str)};  // ✅ 修正点：变量初始化，不是函数声明
+  iss.imbue(std::locale::classic());
+  T parsed_value{};
+  iss >> parsed_value;
+
+  if (!iss || iss.fail() || !iss.eof()) return false;
+
+  value = parsed_value;
+  return true;
+#else  // 其他平台尝试使用 from_chars（只适用于整数和 GCC 11+ 浮点）
+
   T parsed_value{};
   const auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), parsed_value);
 
@@ -47,6 +61,8 @@ TryParseStringWithClassicLocale(std::string_view str, T& value) {
 
   value = parsed_value;
   return true;
+#endif
+
 }
 
 template <typename T>

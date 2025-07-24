@@ -256,16 +256,17 @@ Status EpNode::GetGraph(const OrtGraph*& parent_graph) const {
 }
 
 gsl::span<const EpValueInfo* const> EpNode::GetInputsSpan() const {
-  return inputs_;
+  return gsl::span<const EpValueInfo* const>(inputs_.data(), inputs_.size());
 }
 
 gsl::span<const EpValueInfo* const> EpNode::GetImplicitInputsSpan() const {
-  return implicit_inputs_;
+  return gsl::span<const EpValueInfo* const>(implicit_inputs_.data(), implicit_inputs_.size());
 }
 
 gsl::span<const EpValueInfo* const> EpNode::GetOutputsSpan() const {
-  return outputs_;
+  return gsl::span<const EpValueInfo* const>(outputs_.data(), outputs_.size());
 }
+
 
 const OrtOpAttr* EpNode::GetAttribute(const std::string& name) const {
   auto iter = attributes_map_.find(name);
